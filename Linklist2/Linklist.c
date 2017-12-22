@@ -76,11 +76,6 @@ void LL_RemoveNode(LL_LinkedList_t * pList, LL_Node_t * prev, LL_Node_t* current
 
 }
 
-
-void LL_InsertAtTail(LL_LinkedList_t * pList, LL_Node_t * insert_node )
-{
-
-}
 void split_odd_and_even(LL_LinkedList_t * pList,  LL_Node_t ** pOddList,LL_Node_t ** pEvenList )
 {
     LL_Node_t * current = pList->head;
@@ -94,17 +89,17 @@ void split_odd_and_even(LL_LinkedList_t * pList,  LL_Node_t ** pOddList,LL_Node_
     //! Save off the tail
     tmp  = tail;
 
-    printf("tmp %p tmp %u \n", tmp, tmp->node_data);
+    // printf("tmp %p tmp %u \n", tmp, tmp->node_data);
     while(current != tmp)
     {
-        printf("current data : %d \n",current->node_data );
+        // printf("current data : %d \n",current->node_data );
         if(current->node_data % 2 == 0)
         {
 
             //! Current node is removed
             LL_RemoveNode(pList, prev, current);
             removed_node = current;
-            printf("removed data %u\n", current->node_data);
+            // printf("removed data %u\n", current->node_data);
 
             pList->tail->pNextNode = removed_node;
             pList->tail = removed_node;
@@ -119,7 +114,7 @@ void split_odd_and_even(LL_LinkedList_t * pList,  LL_Node_t ** pOddList,LL_Node_
             prev = current;
             current = current->pNextNode;
         }
-        printf("current data end: %d \n",current->node_data );
+        // printf("current data end: %d \n",current->node_data );
     }
 
     //! handling for the last node
@@ -153,6 +148,7 @@ void main()
     LL_Node_t * odd_head;
     LL_Node_t * even_head;
 
+    //! Test Case for Insertion
     LL_Init(&linklist1);
     printf("Init Done!\n");
     for(i=0; i<11; i++)
@@ -160,6 +156,7 @@ void main()
         LL_Insert_Tail(&linklist1, i);
     }
 
+    //! Prints for visual checking the links (bcus DDD doesnt work on windows >:( ) 
     LL_Node_t * tmp = linklist1.head;
     do
     {
@@ -168,22 +165,26 @@ void main()
     }while (tmp != NULL);
     // Find_tail_manual(&linklist1);
 
+    //! Function to split the linklist into odd and even test
     split_odd_and_even(&linklist1, &odd_head, &even_head);
     tmp = odd_head;
 
+    //! More visual checking
     printf("printing_odd_list \n");
     do
     {
         LL_Print_Node(tmp);
         tmp = tmp->pNextNode;
-//        printf("tmp->pNextNode\n");
+        // printf("tmp->pNextNode\n");
     }while (tmp != NULL);
 
     tmp = even_head;
-    printf("printing_even_list \n");
+    
+    //! Even More visual checking
+    // printf("printing_even_list \n");
     do
     {
-        printf("tmp->pNextNode :%p \n",tmp );
+        // printf("tmp->pNextNode :%p \n",tmp );
         LL_Print_Node(tmp);
         tmp = tmp->pNextNode;
     }while (tmp != NULL);
