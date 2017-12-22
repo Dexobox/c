@@ -15,7 +15,7 @@ void LL_Init(LL_LinkedList_t * pList)
 
 void LL_Insert_Tail(LL_LinkedList_t * pList, uint32_t data)
 {
-   LL_Node_t * tmp = (LL_Node_t *)malloc(sizeof(LL_Node_t));
+   LL_Node_t * tmp = malloc(sizeof(LL_Node_t));
     tmp->pNextNode = NULL;
     tmp->node_data = data;
 
@@ -35,7 +35,7 @@ void LL_Insert_Head(LL_LinkedList_t * pList, uint32_t data)
 {
     LL_Node_t * tmp = pList->head;
 
-    pList->head = (LL_Node_t *) malloc(sizeof(LL_Node_t));
+    pList->head = malloc(sizeof(LL_Node_t));
     pList->tail = tmp;
     pList->count++;
 }
@@ -52,7 +52,7 @@ void LL_Print_Node(LL_Node_t * pNode)
     printf("Node Addr: %p \n\t Node Data: %u \n\t pNextNode:%p \n\n",pNode, pNode->node_data, pNode->pNextNode);
 }
 
-LL_Node_t * Find_tail_manual(LL_LinkedList_t * pList)
+LL_Node_t * LL_Find_tail_manual(LL_LinkedList_t * pList)
 {
     LL_Node_t * curr_node = pList->head;
 
@@ -76,7 +76,7 @@ void LL_RemoveNode(LL_LinkedList_t * pList, LL_Node_t * prev, LL_Node_t* current
 
 }
 
-void split_odd_and_even(LL_LinkedList_t * pList,  LL_Node_t ** pOddList,LL_Node_t ** pEvenList )
+void LL_split_odd_and_even(LL_LinkedList_t * pList,  LL_Node_t ** pOddList,LL_Node_t ** pEvenList )
 {
     LL_Node_t * current = pList->head;
     LL_Node_t * prev = NULL;
@@ -84,13 +84,15 @@ void split_odd_and_even(LL_LinkedList_t * pList,  LL_Node_t ** pOddList,LL_Node_
     LL_Node_t * removed_node;
 
     //! Pretend tail pointer is not available
-    LL_Node_t * tail = Find_tail_manual(pList);
-
-    //! Save off the tail
-    tmp  = tail;
+    //! the link list structrure provided may or may not have the tail pointer set 
+    //  (this is to handle lists which dont have a LL_LinkedList_t structure but just
+    //   have a list of Nodes ... part of two diffrent code bases with ported code with
+    //   different implementations ... <insert other reasons> ... 
+    //   Requirement enforce manual tail finding everytime  ... blah blah blah)
+    LL_Node_t * tail = LL_Find_tail_manual(pList);
 
     // printf("tmp %p tmp %u \n", tmp, tmp->node_data);
-    while(current != tmp)
+    while(current != tail)
     {
         // printf("current data : %d \n",current->node_data );
         if(current->node_data % 2 == 0)
@@ -156,7 +158,7 @@ void main()
         LL_Insert_Tail(&linklist1, i);
     }
 
-    //! Prints for visual checking the links (bcus DDD doesnt work on windows >:( ) 
+    //! Prints for visual checking the links ) 
     LL_Node_t * tmp = linklist1.head;
     do
     {
@@ -166,7 +168,7 @@ void main()
     // Find_tail_manual(&linklist1);
 
     //! Function to split the linklist into odd and even test
-    split_odd_and_even(&linklist1, &odd_head, &even_head);
+    LL_split_odd_and_even(&linklist1, &odd_head, &even_head);
     tmp = odd_head;
 
     //! More visual checking
@@ -181,7 +183,7 @@ void main()
     tmp = even_head;
     
     //! Even More visual checking
-    // printf("printing_even_list \n");
+    printf("printing_even_list \n");
     do
     {
         // printf("tmp->pNextNode :%p \n",tmp );
